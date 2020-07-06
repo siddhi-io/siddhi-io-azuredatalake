@@ -130,8 +130,8 @@ import java.util.concurrent.Future;
                 ),
                 @Parameter(
                         name = "time.interval.to.check.for.updates",
-                        description = "Extension will continuously check for file updates in file/s periodically with " +
-                                "the given interval when 'tailing.enabled' is set to 'true'.\n",
+                        description = "Extension will continuously check for file updates in file/s periodically " +
+                                "with the given interval when 'tailing.enabled' is set to 'true'.\n",
                         type = {DataType.LONG},
                         optional = true,
                         defaultValue = "1000"

@@ -24,13 +24,15 @@ import com.azure.storage.file.datalake.DataLakeFileSystemClient;
 import com.azure.storage.file.datalake.DataLakeServiceClient;
 import com.azure.storage.file.datalake.DataLakeServiceClientBuilder;
 import io.siddhi.extension.io.azurestorage.util.Constant;
+import org.apache.log4j.Logger;
 
 import java.util.Locale;
 
 public class Util {
-    private static final String accountName = "wso2azuredatalakestore";
-    private static final String accountKey =
-            "6n/J8Z9aQ+1wWAV5USyipHsHfgcp2ZOeCb1FeHpyT/Lp/ET6S3kjQMUk2z24uIsBDxOMLjewuTCo18jO2MCMTw==";
+    private static final String accountName = "account_name";
+    private static final String accountKey = "account_key";
+    static final Logger LOG = Logger.getLogger(Util.class);
+
     public static void deleteCreatedParentDirectory(String parentDirectory) {
         StorageSharedKeyCredential credential = new StorageSharedKeyCredential(accountName, accountKey);
         String endpoint = String.format(Locale.ROOT, Constant.ENDPOINT, accountName);
@@ -38,8 +40,20 @@ public class Util {
                 new DataLakeServiceClientBuilder().endpoint(endpoint).credential(credential).buildClient();
         DataLakeFileSystemClient dataLakeFileSystemClient = storageClient.getFileSystemClient("samplecontainer");
         DataLakeDirectoryClient directoryClient = dataLakeFileSystemClient.getDirectoryClient(parentDirectory);
-        if (directoryClient.exists()) {
-            directoryClient.deleteWithResponse(true, null, null, null);
+        try {
+            if (directoryClient.exists()) {
+                directoryClient.deleteWithResponse(true, null, null, null);
+            }
+        } catch (Throwable e) {
+            LOG.error("Couldn't delete the directory: " + parentDirectory, e);
         }
+    }
+
+    protected static String getAccountName() {
+        return accountName;
+    }
+
+    protected static String getAccountKey() {
+        return accountKey;
     }
 }

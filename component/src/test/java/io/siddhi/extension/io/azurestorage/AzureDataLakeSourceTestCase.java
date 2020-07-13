@@ -43,8 +43,8 @@ import static org.testng.Assert.assertEquals;
 public class AzureDataLakeSourceTestCase {
     static final Logger LOG = Logger.getLogger(AzureDataLakeSourceTestCase.class);
     private int count;
-    private final String accountName = "abc";
-    private final String accountKey = "xxx";
+    private final String accountName = Util.getAccountName();
+    private final String accountKey = Util.getAccountKey();
 
     @BeforeMethod
     public void init2() {

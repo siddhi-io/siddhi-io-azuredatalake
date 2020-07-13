@@ -46,8 +46,8 @@ import static org.testng.Assert.assertEquals;
 public class AzureDataLakeSinkTestCase {
     static final Logger LOG = Logger.getLogger(AzureDataLakeSinkTestCase.class);
     private volatile int count;
-    private final String accountName = "abc";
-    private final String accountKey = "xxx";
+    private final String accountName = Util.getAccountName();
+    private final String accountKey = Util.getAccountKey();
 
 
     @BeforeClass

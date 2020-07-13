@@ -1,0 +1,41 @@
+site_name: Siddhi IO Azure Data Lake
+site_description: Siddhi IO Azure Data Lake Extension
+site_author: WSO2
+site_url: https://siddhi-io.github.io/siddhi-io-azuredatalake/
+extra_css:
+- stylesheets/extra.css
+extra_javascript:
+- javascripts/extra.js
+repo_name: Siddhi-IO-azuredatalake
+repo_url: https://github.com/siddhi-io/siddhi-io-azuredatalake
+copyright: Copyright &copy; 2011 - 2020 WSO2
+theme:
+  name: material
+  logo: images/siddhi-logo-w.svg
+  favicon: images/favicon.ico
+  palette:
+    primary: teal
+    accent: teal
+google_analytics:
+- UA-103065-28
+- auto
+extra:
+  social:
+  - type: github
+    link: https://github.com/wso2/siddhi
+  - type: linkedin
+    link: https://www.linkedin.com/groups/13553064
+markdown_extensions:
+- admonition
+- toc:
+    permalink: true
+- codehilite:
+    guess_lang: false
+- pymdownx.tasklist:
+    custom_checkbox: true
+- markdown.extensions.attr_list: null
+pages:
+- Information: index.md
+- API Docs:
+  - latest: api/latest.md
+- License: license.md

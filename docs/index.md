@@ -37,4 +37,3 @@ For installing this extension and to add the dependent jars on various siddhi ex
 * If you find any issues related to the extension please report them on <a target="_blank" href="https://github.com/siddhi-io/siddhi-io-azuredatalake/issues">the issue tracker</a>.
 
 * For production support and other contribution related information refer <a target="_blank" href="https://siddhi.io/community/">Siddhi Community</a> documentation.
-

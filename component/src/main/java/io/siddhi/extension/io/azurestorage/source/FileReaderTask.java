@@ -77,14 +77,18 @@ public class FileReaderTask implements Runnable {
         this.siddhiAppName = siddhiAppName;
         this.active = true;
         this.fileUpdateCheckInterval = fileUpdateCheckInterval;
-        log.debug("Initialized processing file: " + dataLakeFileClient.getFilePath() + " in Siddhi app: " +
-                siddhiAppName + ". Currently, " + state.getSnapshotInfoHashMap().get(filePath).getReadBytes() +
-                " bytes have read.");
+        if (log.isDebugEnabled()) {
+            log.debug("Initialized processing file: " + dataLakeFileClient.getFilePath() + " in Siddhi app: " +
+                    siddhiAppName + ". Currently, " + state.getSnapshotInfoHashMap().get(filePath).getReadBytes() +
+                    " bytes have read.");
+        }
     }
 
     @Override
     public void run() {
-        log.debug("Processing file: " + dataLakeFileClient.getFilePath() + " in Siddhi app: " + siddhiAppName);
+        if (log.isDebugEnabled()) {
+            log.debug("Processing file: " + dataLakeFileClient.getFilePath() + " in Siddhi app: " + siddhiAppName);
+        }
         try {
             long fileSize = dataLakeFileClient.getProperties().getFileSize();
             ByteArrayOutputStream outputStream;
@@ -149,8 +153,11 @@ public class FileReaderTask implements Runnable {
                             try {
                                 try {
                                     while (fileSize == dataLakeFileClient.getProperties().getFileSize()) {
-                                        log.debug("Waiting since tailing enabled for file: " +
-                                                dataLakeFileClient.getFilePath() + " in Siddhi app: " + siddhiAppName);
+                                        if (log.isDebugEnabled()) {
+                                            log.debug("Waiting since tailing enabled for file: " +
+                                                    dataLakeFileClient.getFilePath() + " in Siddhi app: " +
+                                                    siddhiAppName);
+                                        }
                                         Thread.sleep(fileUpdateCheckInterval);
                                     }
                                 } catch (DataLakeStorageException e) {

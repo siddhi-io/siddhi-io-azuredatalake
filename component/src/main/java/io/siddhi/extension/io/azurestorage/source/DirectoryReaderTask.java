@@ -105,7 +105,10 @@ public class DirectoryReaderTask implements Runnable {
                 if (!pathItem.isDirectory()) {
                     currentFiles.add(filePath);
                     if (fileClientMap.get(filePath) == null) {
-                        log.debug("New file detected: " + filePath + " for Siddhi App: " + siddhiAppContext.getName());
+                        if (log.isDebugEnabled()) {
+                            log.debug("New file detected: " + filePath + " for Siddhi App: " +
+                                    siddhiAppContext.getName());
+                        }
                         String[] directoryList = filePath.split(Constant.AZURE_FILE_SEPARATOR);
                         DataLakeDirectoryClient directoryClient =
                                 dataLakeFileSystemClient.getDirectoryClient(directoryList[0]);
@@ -129,8 +132,10 @@ public class DirectoryReaderTask implements Runnable {
             }
             for (Map.Entry<String, DataLakeSource.FileClientInfo> entry : fileClientMap.entrySet()) {
                 if (!currentFiles.contains(entry.getKey())) {
-                    log.debug("Deleted file detected: " + entry.getKey() + " for Siddhi App: " +
-                            siddhiAppContext.getName());
+                    if (log.isDebugEnabled()) {
+                        log.debug("Deleted file detected: " + entry.getKey() + " for Siddhi App: " +
+                                siddhiAppContext.getName());
+                    }
                     DataLakeSource.FileClientInfo fileClientInfo = fileClientMap.get(entry.getKey());
                     fileClientInfo.getFileReaderTaskFuture().cancel(true);
                     fileClientMap.remove(entry.getKey());

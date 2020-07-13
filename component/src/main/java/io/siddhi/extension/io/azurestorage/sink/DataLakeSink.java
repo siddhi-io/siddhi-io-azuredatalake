@@ -189,25 +189,35 @@ public class DataLakeSink extends Sink {
         StorageSharedKeyCredential credential = new StorageSharedKeyCredential(accountName, accountKey);
         String endpoint = String.format(Locale.ROOT, Constant.ENDPOINT, accountName);
         storageClient = new DataLakeServiceClientBuilder().endpoint(endpoint).credential(credential).buildClient();
-        log.debug("Successfully connected to Data Lake service and got the storage client for account: " +
-                accountName + " in Siddhi App: " + siddhiAppContext.getName());
-        log.debug("Checking blob container " + blobContainer + " in the storage account in Siddhi App: " +
-                siddhiAppContext.getName());
+        if (log.isDebugEnabled()) {
+            log.debug("Successfully connected to Data Lake service and got the storage client for account: " +
+                    accountName + " in Siddhi App: " + siddhiAppContext.getName());
+            log.debug("Checking blob container " + blobContainer + " in the storage account in Siddhi App: " +
+                    siddhiAppContext.getName());
+        }
         containerExist = false;
         for (FileSystemItem fileSystemItem : storageClient.listFileSystems()) {
-            log.debug("Found File System with name: " + fileSystemItem.getName() + " in Siddhi App: " +
-                    siddhiAppContext.getName());
+            if (log.isDebugEnabled()) {
+                log.debug("Found File System with name: " + fileSystemItem.getName() + " in Siddhi App: " +
+                        siddhiAppContext.getName());
+            }
             if (fileSystemItem.getName().equalsIgnoreCase(blobContainer)) {
                 containerExist = true;
-                log.debug("Container exists for: " + fileSystemItem.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug("Container exists for: " + fileSystemItem.getName());
+                }
                 if (addToExistingBlobContainer) {
-                    log.debug("Existing container taken since add.to.existing.blob.container is 'true' in " +
-                            "Siddhi App: " + siddhiAppContext.getName());
+                    if (log.isDebugEnabled()) {
+                        log.debug("Existing container taken since add.to.existing.blob.container is 'true' in " +
+                                "Siddhi App: " + siddhiAppContext.getName());
+                    }
                     dataLakeFileSystemClient = storageClient.getFileSystemClient(blobContainer);
                 } else {
                     if (recreateBlobContainer) {
-                        log.debug("Existing container: " + blobContainer + " is deleted in Siddhi App: " +
-                                siddhiAppContext.getName());
+                        if (log.isDebugEnabled()) {
+                            log.debug("Existing container: " + blobContainer + " is deleted in Siddhi App: " +
+                                    siddhiAppContext.getName());
+                        }
                         dataLakeFileSystemClient = storageClient.getFileSystemClient(blobContainer);
                         dataLakeFileSystemClient.delete();
                         boolean containerCreated = false;
@@ -215,9 +225,11 @@ public class DataLakeSink extends Sink {
                             try {
                                 dataLakeFileSystemClient.create();
                                 containerCreated = true;
-                                log.debug("Container " + blobContainer + " is recreated since " +
-                                        "recreate.blob.container is 'true' in Siddhi App: " +
-                                        siddhiAppContext.getName());
+                                if (log.isDebugEnabled()) {
+                                    log.debug("Container " + blobContainer + " is recreated since " +
+                                            "recreate.blob.container is 'true' in Siddhi App: " +
+                                            siddhiAppContext.getName());
+                                }
                             } catch (DataLakeStorageException e) {
                                 //expected exception since it takes a while to delete the blob container
                                 log.warn("Exception occurred when creating blob container: " + e.getMessage());
@@ -253,8 +265,10 @@ public class DataLakeSink extends Sink {
     @Override
     public void connect() throws ConnectionUnavailableException {
         if (!containerExist) {
-            log.debug("Creating new container for name: " + blobContainer + " in storage account: " + accountName +
-                    " in Siddhi App: " + siddhiAppContext.getName());
+            if (log.isDebugEnabled()) {
+                log.debug("Creating new container for name: " + blobContainer + " in storage account: " +
+                        accountName + " in Siddhi App: " + siddhiAppContext.getName());
+            }
             dataLakeFileSystemClient = storageClient.getFileSystemClient(blobContainer);
             dataLakeFileSystemClient.create();
         }
@@ -265,7 +279,9 @@ public class DataLakeSink extends Sink {
             throws ConnectionUnavailableException {
         String filePath = filePathOption.getValue(dynamicOptions);
         if (currentFilePath.compareTo(filePath) != 0) {
-            log.debug("filePath: " + filePath + " is different from currentFilePath: " + currentFilePath);
+            if (log.isDebugEnabled()) {
+                log.debug("filePath: " + filePath + " is different from currentFilePath: " + currentFilePath);
+            }
             currentFilePath = filePath;
             checkAndSetClient(filePath);
         }
@@ -308,7 +324,9 @@ public class DataLakeSink extends Sink {
         filePath = Utils.validateAndGetFilePath(filePath);
         currentFileClientInfo = fileClientMap.get(filePath);
         if (currentFileClientInfo == null) {
-            log.debug("currentFileClientInfo not found in the fileClientMap");
+            if (log.isDebugEnabled()) {
+                log.debug("currentFileClientInfo not found in the fileClientMap");
+            }
             PagedIterable<PathItem> storageIterable = dataLakeFileSystemClient.listPaths();
             java.util.Iterator<PathItem> parentDirectoryIterator = storageIterable.iterator();
             boolean parentDirExists = false;
@@ -321,12 +339,16 @@ public class DataLakeSink extends Sink {
             }
             DataLakeDirectoryClient directoryClient;
             if (!parentDirExists) {
-                log.debug("Creating parent directory: " + directoryList[0] + " in " + blobContainer +
-                        "for storage account: " + accountName + " in Siddhi App: " + siddhiAppContext.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug("Creating parent directory: " + directoryList[0] + " in " + blobContainer +
+                            "for storage account: " + accountName + " in Siddhi App: " + siddhiAppContext.getName());
+                }
                 directoryClient = dataLakeFileSystemClient.createDirectory(directoryList[0]);
             } else {
-                log.debug("Parent directory exists: " + directoryList[0] + " in " + blobContainer +
-                        "for storage account: " + accountName + " in Siddhi App: " + siddhiAppContext.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug("Parent directory exists: " + directoryList[0] + " in " + blobContainer +
+                            "for storage account: " + accountName + " in Siddhi App: " + siddhiAppContext.getName());
+                }
                 directoryClient = dataLakeFileSystemClient.getDirectoryClient(directoryList[0]);
             }
             // checking the sub directories exists and creating if not.
@@ -347,8 +369,10 @@ public class DataLakeSink extends Sink {
                     }
                 }
                 if (!directoryFound) {
-                    log.debug("Creating " + directoryList[directories] + ", since not found in: " +
-                            directoryStructure + " in Siddhi App: " + siddhiAppContext.getName());
+                    if (log.isDebugEnabled()) {
+                        log.debug("Creating " + directoryList[directories] + ", since not found in: " +
+                                directoryStructure + " in Siddhi App: " + siddhiAppContext.getName());
+                    }
                     directoryClient = directoryClient.createSubdirectory(directoryList[directories]);
                 } else {
                     directoryClient = directoryClient.getSubdirectoryClient(directoryList[directories]);
@@ -361,15 +385,19 @@ public class DataLakeSink extends Sink {
             options.setPath(directoryStructure);
             PagedIterable<PathItem> pagedIterable = dataLakeFileSystemClient.listPaths(options, null);
             java.util.Iterator<PathItem> iterator = pagedIterable.iterator();
-            log.debug("Checking the " + fileName + " file in the path: " + directoryStructure +
-                    " in Siddhi App: " + siddhiAppContext.getName());
+            if (log.isDebugEnabled()) {
+                log.debug("Checking the " + fileName + " file in the path: " + directoryStructure +
+                        " in Siddhi App: " + siddhiAppContext.getName());
+            }
             boolean fileExists = false;
             while (iterator.hasNext()) {
                 String name = iterator.next().getName();
                 if (name.equals(filePath)) {
                     if (!appendIfFileExists) {
-                        log.debug("Deleting and creating " + name + " file since : !appendIfFileExists in " +
-                                "Siddhi App: " + siddhiAppContext.getName());
+                        if (log.isDebugEnabled()) {
+                            log.debug("Deleting and creating " + name + " file since : !appendIfFileExists in " +
+                                    "Siddhi App: " + siddhiAppContext.getName());
+                        }
                         directoryClient.deleteFile(fileName);
                         directoryClient.createFile(fileName);
                     }
@@ -378,8 +406,10 @@ public class DataLakeSink extends Sink {
                 }
             }
             if (!fileExists) {
-                log.debug("Creating " + fileName + " at " + directoryStructure + " directory in Siddhi App: " +
-                        siddhiAppContext.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug("Creating " + fileName + " at " + directoryStructure + " directory in Siddhi App: " +
+                            siddhiAppContext.getName());
+                }
                 directoryClient.createFile(fileName);
             }
             fileClient = directoryClient.getFileClient(fileName);

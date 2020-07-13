@@ -254,7 +254,9 @@ public class DataLakeSource extends Source<DataLakeSource.AzureDataLakeSourceSta
     }
 
     private void createDirectoryStructureIfNotExistForMoving(String filePath) {
-        log.debug("create directory if not found for moving the file after processing.");
+        if (log.isDebugEnabled()) {
+            log.debug("create directory if not found for moving the file after processing.");
+        }
         PagedIterable<PathItem> storageIterable = dataLakeFileSystemClient.listPaths();
         java.util.Iterator<PathItem> parentDirectoryIterator = storageIterable.iterator();
         boolean parentDirExists = false;
@@ -266,13 +268,17 @@ public class DataLakeSource extends Source<DataLakeSource.AzureDataLakeSourceSta
         }
         DataLakeDirectoryClient directoryClient;
         if (!parentDirExists) {
-            log.debug("Creating parent directory: " + directoryList[0] + " in " + blobContainer +
-                    "for storage account: " + accountName + " in Siddhi App: " + siddhiAppContext.getName() +
-                    " for move.after.process");
+            if (log.isDebugEnabled()) {
+                log.debug("Creating parent directory: " + directoryList[0] + " in " + blobContainer +
+                        "for storage account: " + accountName + " in Siddhi App: " + siddhiAppContext.getName() +
+                        " for move.after.process");
+            }
             directoryClient = dataLakeFileSystemClient.createDirectory(directoryList[0]);
         } else {
-            log.debug("Parent directory: " + directoryList[0] + " exists in blob container: " + blobContainer +
-                    "for storage account: " + accountName + " in Siddhi App: " + siddhiAppContext.getName());
+            if (log.isDebugEnabled()) {
+                log.debug("Parent directory: " + directoryList[0] + " exists in blob container: " + blobContainer +
+                        "for storage account: " + accountName + " in Siddhi App: " + siddhiAppContext.getName());
+            }
             directoryClient = dataLakeFileSystemClient.getDirectoryClient(directoryList[0]);
         }
         // checking the sub directories exists and creating if not.
@@ -293,13 +299,17 @@ public class DataLakeSource extends Source<DataLakeSource.AzureDataLakeSourceSta
                 }
             }
             if (!directoryFound) {
-                log.debug("Creating " + directoryList[directories] + ", since not found in: " +
-                        directoryStructure + " in Siddhi App: " + siddhiAppContext.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug("Creating " + directoryList[directories] + ", since not found in: " +
+                            directoryStructure + " in Siddhi App: " + siddhiAppContext.getName());
+                }
                 directoryClient = directoryClient.createSubdirectory(directoryList[directories]);
             } else {
                 directoryClient = directoryClient.getSubdirectoryClient(directoryList[directories]);
-                log.debug(directoryList[directories] + " exists in: " +
-                        directoryStructure + " in Siddhi App: " + siddhiAppContext.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug(directoryList[directories] + " exists in: " +
+                            directoryStructure + " in Siddhi App: " + siddhiAppContext.getName());
+                }
             }
             directoryStructure = directoryStructure.concat(Constant.AZURE_FILE_SEPARATOR + directoryList[directories]);
             directories++;
@@ -372,8 +382,10 @@ public class DataLakeSource extends Source<DataLakeSource.AzureDataLakeSourceSta
         boolean fileExists = false;
         String filePath;
         if (fileName != null) {
-            log.debug("Checking the file: " + fileName + " in the path: " + directoryStructure +
-                    " in Siddhi App: " + siddhiAppContext.getName());
+            {
+                log.debug("Checking the file: " + fileName + " in the path: " + directoryStructure +
+                        " in Siddhi App: " + siddhiAppContext.getName());
+            }
             filePath = directoryStructure + Constant.AZURE_FILE_SEPARATOR + fileName;
             while (iterator.hasNext()) {
                 String name = iterator.next().getName();
@@ -391,13 +403,17 @@ public class DataLakeSource extends Source<DataLakeSource.AzureDataLakeSourceSta
                         siddhiAppContext.getName() + "'.");
             }
         } else {
-            log.debug("Checking files in the path: " + directoryStructure + " in Siddhi App: " +
-                    siddhiAppContext.getName());
+            if (log.isDebugEnabled()) {
+                log.debug("Checking files in the path: " + directoryStructure + " in Siddhi App: " +
+                        siddhiAppContext.getName());
+            }
             while (iterator.hasNext()) {
                 PathItem pathItem = iterator.next();
                 if (!pathItem.isDirectory()) {
-                    log.debug("Listing item: " + pathItem.getName() + " in Siddhi App: " +
-                            siddhiAppContext.getName());
+                    if (log.isDebugEnabled()) {
+                        log.debug("Listing item: " + pathItem.getName() + " in Siddhi App: " +
+                                siddhiAppContext.getName());
+                    }
                     String[] filePathContent = pathItem.getName().split(Constant.AZURE_FILE_SEPARATOR);
                     fileName = filePathContent[filePathContent.length - 1];
                     fileClientMap.put(pathItem.getName(),
@@ -587,9 +603,10 @@ public class DataLakeSource extends Source<DataLakeSource.AzureDataLakeSourceSta
             Map<String, Object> currentState = new HashMap<>();
             for (Map.Entry<String, FileClientSnapshotInfo> entry : snapshotInfoHashMap.entrySet()) {
                 FileClientSnapshotInfo fileClientInfo = entry.getValue();
-                log.debug("Snapshotting read bytes for file: " +
-                        fileClientInfo.getFilePath() + " is: " + fileClientInfo.getReadBytes());
-
+                if (log.isDebugEnabled()) {
+                    log.debug("Snapshotting read bytes for file: " +
+                            fileClientInfo.getFilePath() + " is: " + fileClientInfo.getReadBytes());
+                }
             }
             currentState.put(Constant.FILE_CLIENT_MAP, snapshotInfoHashMap);
             return currentState;
@@ -601,8 +618,10 @@ public class DataLakeSource extends Source<DataLakeSource.AzureDataLakeSourceSta
                     (Map<String, DataLakeSource.FileClientSnapshotInfo>) state.get(Constant.FILE_CLIENT_MAP);
             for (Map.Entry<String, FileClientSnapshotInfo> entry : snapshotInfoHashMap.entrySet()) {
                 FileClientSnapshotInfo fileClientInfo = entry.getValue();
-                log.debug("Restore read bytes for file: " +
-                        fileClientInfo.getFilePath() + " is: " + fileClientInfo.getReadBytes());
+                if (log.isDebugEnabled()) {
+                    log.debug("Restore read bytes for file: " +
+                            fileClientInfo.getFilePath() + " is: " + fileClientInfo.getReadBytes());
+                }
 
             }
         }

@@ -51,9 +51,9 @@
     </profiles>
 
     <scm>
-        <connection>scm:git:https://github.com/siddhi-io/siddhi-store-azuredatalake.git</connection>
-        <url>https://github.com/siddhi-io/siddhi-store-azuredatalake.git</url>
-        <developerConnection>scm:git:https://github.com/siddhi-io/siddhi-store-azuredatalake.git
+        <connection>scm:git:https://github.com/siddhi-io/siddhi-io-azuredatalake.git</connection>
+        <url>https://github.com/siddhi-io/siddhi-io-azuredatalake.git</url>
+        <developerConnection>scm:git:https://github.com/siddhi-io/siddhi-io-azuredatalake.git
         </developerConnection>
         <tag>HEAD</tag>
     </scm>

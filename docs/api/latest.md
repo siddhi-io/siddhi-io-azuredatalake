@@ -1,0 +1,245 @@
+# API Docs - v1.0.0
+
+!!! Info "Tested Siddhi Core version: *<a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/">5.1.12</a>*"
+    It could also support other Siddhi Core minor versions.
+
+## Sink
+
+### azuredatalake *<a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/#sink">(Sink)</a>*
+<p></p>
+<p style="word-wrap: break-word;margin: 0;">Azure Data Lake Sink can be used to publish (write) event data which is processed within siddhi to file in Azure Data Lake.<br>Siddhi-io-azuredatalake sink provides support to write both textual and binary data into files.</p>
+<p></p>
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+
+```
+@sink(type="azuredatalake", account.name="<STRING>", account.key="<STRING>", blob.container="<STRING>", add.to.existing.blob.container="<BOOL>", recreate.blob.container="<BOOL>", file.path="<STRING>", append="<BOOL>", add.line.separator="<BOOL>", @map(...)))
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">account.name</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">Azure storage account name to be used. This can be found in the storage account's settings under 'Access Keys'</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">account.key</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">Azure storage account key to be used. This can be found in the storage account's settings under 'Access Keys'</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">blob.container</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">The new or existing container name to be used.</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">add.to.existing.blob.container</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">This flag will be used to mention adding to an existing container with the same name is allowed.</p></td>
+        <td style="vertical-align: top">true</td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">recreate.blob.container</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">This flag will be used to recreate if there is an existing container with the same name.</p></td>
+        <td style="vertical-align: top">false</td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">file.path</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">The absolute file path to the file in the blob container.</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">append</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">This flag is used to specify whether the data should be append to the file or not.<br>If append = 'true', data will be write at the end of the file without changing the existing content.<br>If append = 'false', if given file exists, existing content will be deleted and then data will be written back to the file.<br>It is advisable to make append = 'true' when dynamic urls are used.</p></td>
+        <td style="vertical-align: top">true</td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">add.line.separator</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">This flag is used to specify whether events added to the file should be separated by a newline.<br>If add.event.separator= 'true', then a newline will be added after data is added to the file.<br>If the @map type is 'csv' the new line will be added by default</p></td>
+        <td style="vertical-align: top">true</td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+@sink(
+type='azuredatalake', 
+account.name='wso2datalakestore', 
+account.key='jUTCeBGgQgd7Wahm/tLGdFgoHuxmUC+KYzqiBKgKMt26gGp1Muk2U6gy34A3oqogQ4EX3+9SGUlXKHQNALeYqQ==', 
+blob.container='samplecontainer', 
+file.path='parentDir/subDir/events.txt', 
+@map(type='csv')
+)
+Define stream BarStream (symbol string, price float, volume long);
+```
+<p></p>
+<p style="word-wrap: break-word;margin: 0;">Under above configuration, a file(events.txt) will be created(if not exists) in the storage account 'wso2datalakestore' in the parentDir/subDir/ path.<br>For each event received to the sink, it will get appended to the file in csv formatoutput will looks like below.<br>WSO2,55.6,100<br>IBM,55.7,102</p>
+<p></p>
+## Source
+
+### azuredatalake *<a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/#source">(Source)</a>*
+<p></p>
+<p style="word-wrap: break-word;margin: 0;">Azure Data Lake Source can be used to read event data from files in Azure Data Lake and feed data to Siddhi.</p>
+<p></p>
+<span id="syntax" class="md-typeset" style="display: block; font-weight: bold;">Syntax</span>
+
+```
+@source(type="azuredatalake", account.name="<STRING>", account.key="<STRING>", blob.container="<STRING>", dir.uri="<STRING>", file.name="<STRING>", bytes.to.read.from.file="<LONG>", tailing.enabled="<BOOL>", action.after.process="<STRING>", move.after.process="<STRING>", waiting.time.to.load.container="<LONG>", time.interval.to.check.directory="<LONG>", time.interval.to.check.for.updates="<LONG>", @map(...)))
+```
+
+<span id="query-parameters" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">QUERY PARAMETERS</span>
+<table>
+    <tr>
+        <th>Name</th>
+        <th style="min-width: 20em">Description</th>
+        <th>Default Value</th>
+        <th>Possible Data Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">account.name</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">Azure storage account name to be used. This can be found in the storage account's settings under 'Access Keys'</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">account.key</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">Azure storage account key to be used. This can be found in the storage account's settings under 'Access Keys'</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">blob.container</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">The container name of the Azure Data Lake Storage.</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">dir.uri</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">The absolute file path to the file in the blob container to be read.</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">file.name</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">The absolute file path to the file in the blob container to be read.</p></td>
+        <td style="vertical-align: top"></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">No</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">bytes.to.read.from.file</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">The number of bytes to be read at once.</p></td>
+        <td style="vertical-align: top">32768</td>
+        <td style="vertical-align: top">LONG</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">tailing.enabled</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">The extension will continously check for the new content added to the files when this parameter is set to 'true'.</p></td>
+        <td style="vertical-align: top">false</td>
+        <td style="vertical-align: top">BOOL</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">action.after.process</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">The action which should be carried out <br>after processing a file in the given directory. <br>It can be either <code>delete</code>, <code>move</code> or <code>keep</code> and default value will be 'DELETE'.<br>If the action.after.process is MOVE, user must specify the location to move consumed files using 'move.after.process' parameter.<br></p></td>
+        <td style="vertical-align: top">delete</td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">move.after.process</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">If action.after.process is MOVE, user must specify the location to move consumed files using 'move.after.process' parameter.<br>This should be the absolute path of the file that going to be created after moving is done.<br>This has to be the relative path from the file system excluding the file system name.</p></td>
+        <td style="vertical-align: top"><Empty_String></td>
+        <td style="vertical-align: top">STRING</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">waiting.time.to.load.container</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">Extension will wait the mentioned time in this parameter until the blob container becomes available, before exiting with the SiddhiAppCreationException.<br></p></td>
+        <td style="vertical-align: top">5000</td>
+        <td style="vertical-align: top">LONG</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">time.interval.to.check.directory</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">Extension will check for new files in the given directory periodically with the given interval.<br></p></td>
+        <td style="vertical-align: top">1000</td>
+        <td style="vertical-align: top">LONG</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+    <tr>
+        <td style="vertical-align: top">time.interval.to.check.for.updates</td>
+        <td style="vertical-align: top; word-wrap: break-word"><p style="word-wrap: break-word;margin: 0;">Extension will continuously check for file updates in file/s periodically with the given interval when 'tailing.enabled' is set to 'true'.<br></p></td>
+        <td style="vertical-align: top">1000</td>
+        <td style="vertical-align: top">LONG</td>
+        <td style="vertical-align: top">Yes</td>
+        <td style="vertical-align: top">No</td>
+    </tr>
+</table>
+
+<span id="examples" class="md-typeset" style="display: block; font-weight: bold;">Examples</span>
+<span id="example-1" class="md-typeset" style="display: block; color: rgba(0, 0, 0, 0.54); font-size: 12.8px; font-weight: bold;">EXAMPLE 1</span>
+```
+@sink(
+type='azuredatalake', 
+account.name='wso2datalakestore', 
+account.key='jUTCeBGgQgd7Wahm/tLGdFgoHuxmUC+KYzqiBKgKMt26gGp1Muk2U6gy34A3oqogQ4EX3+9SGUlXKHQNALeYqQ==', 
+blob.container='samplecontainer', 
+file.path='parentDir/subDir/events.txt', 
+@map(type='csv')
+)
+Define stream BarStream (symbol string, price float, volume long);
+```
+<p></p>
+<p style="word-wrap: break-word;margin: 0;">Under above configuration, a file(events.txt) will be created(if not exists) in the storage account 'wso2datalakestore' in the parentDir/subDir/ path.<br>For each event received to the sink, it will get appended to the file in csv formatoutput will looks like below.<br>WSO2,55.6,100<br>IBM,55.7,102</p>
+<p></p>

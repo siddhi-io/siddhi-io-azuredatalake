@@ -18,12 +18,12 @@ For information on <a target="_blank" href="https://siddhi.io/">Siddhi</a> and i
 
 ## Latest API Docs 
 
-Latest API Docs is <a target="_blank" href="https://siddhi-io.github.io/siddhi-io-azuredatalake/api/1.0.0">1.0.0</a>.
+Latest API Docs is <a target="_blank" href="https://siddhi-io.github.io/siddhi-io-azuredatalake/api/1.0.1">1.0.1</a>.
 
 ## Features
 
-* <a target="_blank" href="https://siddhi-io.github.io/siddhi-io-azuredatalake/api/1.0.0/#azuredatalake-sink">azuredatalake</a> *(<a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/#sink">Sink</a>)*<br> <div style="padding-left: 1em;"><p><p style="word-wrap: break-word;margin: 0;">Azure Data Lake Sink can be used to publish (write) event data which is processed within siddhi to file in Azure Data Lake.<br>Siddhi-io-azuredatalake sink provides support to write both textual and binary data into files.</p></p></div>
-* <a target="_blank" href="https://siddhi-io.github.io/siddhi-io-azuredatalake/api/1.0.0/#azuredatalake-source">azuredatalake</a> *(<a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/#source">Source</a>)*<br> <div style="padding-left: 1em;"><p><p style="word-wrap: break-word;margin: 0;">Azure Data Lake Source can be used to read event data from files in Azure Data Lake and feed data to Siddhi.</p></p></div>
+* <a target="_blank" href="https://siddhi-io.github.io/siddhi-io-azuredatalake/api/1.0.1/#azuredatalake-sink">azuredatalake</a> *(<a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/#sink">Sink</a>)*<br> <div style="padding-left: 1em;"><p><p style="word-wrap: break-word;margin: 0;">Azure Data Lake Sink can be used to publish (write) event data which is processed within siddhi to file in Azure Data Lake.<br>Siddhi-io-azuredatalake sink provides support to write both textual and binary data into files.</p></p></div>
+* <a target="_blank" href="https://siddhi-io.github.io/siddhi-io-azuredatalake/api/1.0.1/#azuredatalake-source">azuredatalake</a> *(<a target="_blank" href="http://siddhi.io/en/v5.1/docs/query-guide/#source">Source</a>)*<br> <div style="padding-left: 1em;"><p><p style="word-wrap: break-word;margin: 0;">Azure Data Lake Source can be used to read event data from files in Azure Data Lake and feed data to Siddhi.</p></p></div>
 
 ## Dependencies 
 

@@ -26,7 +26,6 @@ import com.azure.storage.file.datalake.DataLakeFileSystemClient;
 import com.azure.storage.file.datalake.DataLakeServiceClient;
 import com.azure.storage.file.datalake.DataLakeServiceClientBuilder;
 import com.azure.storage.file.datalake.models.DataLakeStorageException;
-import com.azure.storage.file.datalake.models.FileSystemItem;
 import com.azure.storage.file.datalake.models.ListPathsOptions;
 import com.azure.storage.file.datalake.models.PathItem;
 import io.siddhi.annotation.Example;
@@ -56,6 +55,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -152,7 +152,7 @@ public class DataLakeSink extends Sink {
     private boolean addLineSeparator;
     private long fileOffset;
     private SiddhiAppContext siddhiAppContext;
-    private boolean containerExist;
+    private boolean containerExist = false;
     private Map<String, FileClientInfo> fileClientMap;
     private FileClientInfo currentFileClientInfo;
     private String currentFilePath;
@@ -196,15 +196,12 @@ public class DataLakeSink extends Sink {
                     siddhiAppContext.getName());
         }
         containerExist = false;
-        for (FileSystemItem fileSystemItem : storageClient.listFileSystems()) {
-            if (log.isDebugEnabled()) {
-                log.debug("Found File System with name: " + fileSystemItem.getName() + " in Siddhi App: " +
-                        siddhiAppContext.getName());
-            }
-            if (fileSystemItem.getName().equalsIgnoreCase(blobContainer)) {
+        try {
+            if (storageClient.getFileSystemClient(blobContainer).getProperties() != null) {
+                dataLakeFileSystemClient = storageClient.getFileSystemClient(blobContainer);
                 containerExist = true;
                 if (log.isDebugEnabled()) {
-                    log.debug("Container exists for: " + fileSystemItem.getName());
+                    log.debug("Container exists for: " + blobContainer);
                 }
                 if (addToExistingBlobContainer) {
                     if (log.isDebugEnabled()) {
@@ -250,7 +247,26 @@ public class DataLakeSink extends Sink {
                     }
                 }
             }
+        } catch (DataLakeStorageException e) {
+            if (!e.getMessage().contains("ContainerNotFound")) {
+                if (e.getMessage().contains("InvalidResourceName")) {
+                    throw new SiddhiAppCreationException("In 'Azure Data Lake' sink of the Siddhi app '" +
+                            siddhiAppContext.getName() + "', Blob container name: '" + blobContainer +
+                            "' contains invalid characters.", e);
+                } else {
+                    throw new SiddhiAppCreationException("Exception occurred In 'Azure Data Lake' sink of the " +
+                            "Siddhi app '" + siddhiAppContext.getName() + "', for Blob container name: '" +
+                            blobContainer + "'.", e);
+                }
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("In 'Azure Data Lake' sink of the Siddhi app '" +
+                            siddhiAppContext.getName() + "', Blob container name: '" + blobContainer +
+                            "' not found.");
+                }
+            }
         }
+
         String mapType = streamDefinition.getAnnotations().get(0).getAnnotations().get(0).getElements().get(0)
                 .getValue();
         addLineSeparator = !mapType.equalsIgnoreCase("csv") &&

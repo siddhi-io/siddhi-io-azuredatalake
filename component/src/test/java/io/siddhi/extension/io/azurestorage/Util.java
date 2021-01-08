@@ -29,8 +29,10 @@ import org.apache.log4j.Logger;
 import java.util.Locale;
 
 public class Util {
-    private static final String accountName = "account_name";
-    private static final String accountKey = "account_key";
+    private static final String accountName = "eflstorageloc";
+    private static final String accountKey = "OXLCemzay5o5xYMjsAKmJ521jPaJZMlKPko3/hZ3WhIHgT0BeKI2Dv4AmtBTojWyp" +
+            "FENJbjCFEILfr6SEC1V1A==";
+    private static final String containerName = "eflcontainer";
     static final Logger LOG = Logger.getLogger(Util.class);
 
     public static void deleteCreatedParentDirectory(String parentDirectory) {
@@ -38,7 +40,7 @@ public class Util {
         String endpoint = String.format(Locale.ROOT, Constant.ENDPOINT, accountName);
         DataLakeServiceClient storageClient =
                 new DataLakeServiceClientBuilder().endpoint(endpoint).credential(credential).buildClient();
-        DataLakeFileSystemClient dataLakeFileSystemClient = storageClient.getFileSystemClient("samplecontainer");
+        DataLakeFileSystemClient dataLakeFileSystemClient = storageClient.getFileSystemClient(containerName);
         DataLakeDirectoryClient directoryClient = dataLakeFileSystemClient.getDirectoryClient(parentDirectory);
         try {
             if (directoryClient.exists()) {
@@ -55,5 +57,9 @@ public class Util {
 
     protected static String getAccountKey() {
         return accountKey;
+    }
+
+    protected static String getContainerName() {
+        return containerName;
     }
 }

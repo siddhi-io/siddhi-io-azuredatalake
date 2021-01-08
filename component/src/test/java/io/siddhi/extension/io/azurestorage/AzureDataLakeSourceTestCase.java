@@ -45,6 +45,7 @@ public class AzureDataLakeSourceTestCase {
     private int count;
     private final String accountName = Util.getAccountName();
     private final String accountKey = Util.getAccountKey();
+    private final String containerName = Util.getContainerName();
 
     @BeforeMethod
     public void init2() {
@@ -63,7 +64,7 @@ public class AzureDataLakeSourceTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "file.path='parentDir/subDir/" + fileName + "', " +
                         "@map(type='csv'))" +
                         "Define stream BarStream (symbol string, price float, volume long);" +
@@ -93,7 +94,7 @@ public class AzureDataLakeSourceTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "file.path='{{parentDir}}/{{subDir}}/{{fileName}}.txt', " +
                         "@map(type='csv', @payload(symbol=\"0\",price=\"1\",volume=\"2\")))" +
                         "Define stream BarStream (parentDir string, subDir string, fileName string, symbol string, " +
@@ -125,7 +126,7 @@ public class AzureDataLakeSourceTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "file.path='{{parentDir}}/{{subDir}}/{{fileName}}.txt', " +
                         "@map(type='csv', @payload(symbol=\"0\",price=\"1\",volume=\"2\")))" +
                         "Define stream BarStream (parentDir string, subDir string, fileName string, symbol string, " +
@@ -183,7 +184,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='/parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='keep'," +
@@ -207,7 +208,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='/parentDir/subDir/', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='keep'," +
@@ -232,7 +233,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir1/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='keep'," +
@@ -257,7 +258,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published1.txt'," +
                         "action.after.process='keep'," +
@@ -282,7 +283,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='delete'," +
@@ -308,7 +309,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='move'," +
@@ -332,7 +333,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='keep'," +
@@ -377,7 +378,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='move'," +
@@ -403,7 +404,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/movedDirectory', " +
                         "file.name='events_processed.txt'," +
                         "action.after.process='keep'," +
@@ -448,7 +449,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/movedDirectory', " +
                         "file.name='events_processed.txt'," +
                         "action.after.process='move'," +
@@ -474,7 +475,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='keep'," +
@@ -519,7 +520,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "@map(type='csv'))" +
@@ -564,7 +565,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir/temp', " +
                         "file.name='events_published.txt'," +
                         "@map(type='csv'))" +
@@ -594,7 +595,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "action.after.process='delete'," +
                         "@map(type='csv'))" +
@@ -645,7 +646,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "tailing.enabled='true'," +
@@ -697,7 +698,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "tailing.enabled='true'," +
                         "@map(type='csv'))" +
@@ -774,7 +775,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "action.after.process='keep'," +
                         "@map(type='csv'))" +
@@ -826,7 +827,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "action.after.process='delete'," +
                         "@map(type='csv'))" +
@@ -854,7 +855,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "action.after.process='delete'," +
                         "@map(type='csv'))" +
@@ -911,7 +912,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "tailing.enabled='true'," +
                         "@map(type='csv'))" +
@@ -965,7 +966,7 @@ public class AzureDataLakeSourceTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='keep'," +

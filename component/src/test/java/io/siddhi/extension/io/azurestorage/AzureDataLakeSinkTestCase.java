@@ -48,7 +48,7 @@ public class AzureDataLakeSinkTestCase {
     private volatile int count;
     private final String accountName = Util.getAccountName();
     private final String accountKey = Util.getAccountKey();
-
+    private final String containerName = Util.getContainerName();
 
     @BeforeClass
     public static void init() throws Exception {
@@ -76,7 +76,7 @@ public class AzureDataLakeSinkTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "file.path='parentDir/subDir/" + fileName + "', " +
                         "@map(type='csv'))" +
                         "Define stream BarStream (symbol string, price float, volume long);" +
@@ -107,7 +107,7 @@ public class AzureDataLakeSinkTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "file.path='parentDir/subDir/events_published.txt', " +
                         "@map(type='csv'))" +
                         "Define stream BarStream (symbol string, price float, volume long);" +
@@ -125,7 +125,7 @@ public class AzureDataLakeSinkTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "file.name='events_published.txt'," +
                         "action.after.process='delete'," +
@@ -161,7 +161,7 @@ public class AzureDataLakeSinkTestCase {
         siddhiAppRuntime2.shutdown();
     }
 
-    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    @Test(dependsOnMethods = "testDefaultPublisherDataLake", expectedExceptions = SiddhiAppCreationException.class)
     public void testDefaultPublisherWithCreatingContainerDataLake() {
         Util.deleteCreatedParentDirectory("parentDir");
         LOG.info("Creating test for validating parameters when publishing events.");
@@ -172,7 +172,7 @@ public class AzureDataLakeSinkTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "add.to.existing.blob.container='false'," +
                         "recreate.blob.container='false'," +
                         "file.path='parentDir/subDir/events_published.txt', " +
@@ -183,7 +183,8 @@ public class AzureDataLakeSinkTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    @Test(dependsOnMethods = "testDefaultPublisherWithCreatingContainerDataLake",
+            expectedExceptions = SiddhiAppCreationException.class)
     public void testDefaultPublisherWithInvalidDataLakePath() {
         Util.deleteCreatedParentDirectory("parentDir");
         LOG.info("Creating test for validating parameters when publishing events.");
@@ -194,7 +195,7 @@ public class AzureDataLakeSinkTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "add.to.existing.blob.container='false'," +
                         "recreate.blob.container='false'," +
                         "file.path='/parentDir/subDir/events_published.txt', " +
@@ -205,7 +206,7 @@ public class AzureDataLakeSinkTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test
+    @Test(dependsOnMethods = "testDefaultPublisherWithInvalidDataLakePath")
     public void testDefaultPublisherWithCreatingContainer2DataLake() throws InterruptedException {
         Util.deleteCreatedParentDirectory("parentDir");
         testHelperToPublishEventsToDataLake(null, null);
@@ -217,7 +218,7 @@ public class AzureDataLakeSinkTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "add.to.existing.blob.container='false'," +
                         "recreate.blob.container='true'," +
                         "file.path='parentDir/subDir/events_published.txt', " +
@@ -229,7 +230,7 @@ public class AzureDataLakeSinkTestCase {
         siddhiAppRuntime.shutdown();
     }
 
-    @Test
+    @Test(dependsOnMethods = "testDefaultPublisherWithCreatingContainer2DataLake")
     public void testDynamicURLForFileDataLake() throws InterruptedException {
         LOG.info("Creating test for dynamically create path for the publishing file and validate using source's " +
                 "trp properties.");
@@ -237,17 +238,17 @@ public class AzureDataLakeSinkTestCase {
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(
                 "@App:name('TestExecutionPlan') " +
                         "define stream FooStream (parentDir string, subDir string, fileName string, symbol string, " +
-                            "price float, volume long); " +
+                        "price float, volume long); " +
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "file.path='{{parentDir}}/{{subDir}}/{{fileName}}.txt', " +
                         "@map(type='csv', @payload(symbol=\"0\",price=\"1\",volume=\"2\")))" +
                         "Define stream BarStream (parentDir string, subDir string, fileName string, symbol string, " +
-                            "price float, volume long);" +
+                        "price float, volume long);" +
                         "from FooStream select parentDir, subDir, fileName, symbol, price, volume insert into " +
-                            "BarStream;");
+                        "BarStream;");
         InputHandler fooStream = siddhiAppRuntime.getInputHandler("FooStream");
         siddhiAppRuntime.start();
         fooStream.send(new Object[]{"parentDir", "subDir", "events", "single_topic1", 55.6f, 100L});
@@ -266,7 +267,7 @@ public class AzureDataLakeSinkTestCase {
                 "@source(type='azuredatalake', " +
                 "account.name='" + accountName + "', " +
                 "account.key='" + accountKey + "', " +
-                "blob.container='samplecontainer', " +
+                "blob.container='" + containerName + "', " +
                 "dir.uri='{{parentDir}}/{{subDir}}', " +
                 "action.after.process='delete'," +
                 "@map( type='csv', delimiter=',', " +
@@ -324,9 +325,8 @@ public class AzureDataLakeSinkTestCase {
         Util.deleteCreatedParentDirectory("parentDir2");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testDynamicURLForFileDataLake")
     public void testDataLakeFileAppend() throws InterruptedException {
-        Util.deleteCreatedParentDirectory("parentDir");
         LOG.info("Creating test for publishing events and appending to existing file.");
         SiddhiManager siddhiManager = new SiddhiManager();
         SiddhiAppRuntime siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(
@@ -335,7 +335,7 @@ public class AzureDataLakeSinkTestCase {
                         "@sink(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "file.path='parentDir/subDir/events_published.txt', " +
                         "append='true', " +
                         "@map(type='csv'))" +
@@ -361,7 +361,7 @@ public class AzureDataLakeSinkTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "append='true', " +
                         "file.name='events_published.txt'," +
@@ -383,7 +383,7 @@ public class AzureDataLakeSinkTestCase {
         Util.deleteCreatedParentDirectory("parentDir");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testDataLakeFileAppend")
     public void testDataLakeFileWithoutAppend() throws InterruptedException {
         Util.deleteCreatedParentDirectory("parentDir");
         LOG.info("Creating test for publishing events and deleting if file exists before adding events.");
@@ -393,7 +393,7 @@ public class AzureDataLakeSinkTestCase {
                 "@sink(type='azuredatalake', " +
                 "account.name='" + accountName + "', " +
                 "account.key='" + accountKey + "', " +
-                "blob.container='samplecontainer', " +
+                "blob.container='" + containerName + "', " +
                 "file.path='parentDir/subDir/events_published.txt', " +
                 "append='false', " +
                 "@map(type='csv'))" +
@@ -421,7 +421,7 @@ public class AzureDataLakeSinkTestCase {
                         "@source(type='azuredatalake', " +
                         "account.name='" + accountName + "', " +
                         "account.key='" + accountKey + "', " +
-                        "blob.container='samplecontainer', " +
+                        "blob.container='" + containerName + "', " +
                         "dir.uri='parentDir/subDir', " +
                         "append='true', " +
                         "file.name='events_published.txt'," +

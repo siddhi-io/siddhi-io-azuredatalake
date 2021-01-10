@@ -31,7 +31,7 @@
 
     <groupId>io.siddhi.extension.io.azuredatalake</groupId>
     <artifactId>siddhi-io-azuredatalake-parent</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Siddhi IO Azure Data Lake Extension Parent</name>
     <url>http://wso2.org</url>
@@ -53,7 +53,7 @@
         <url>https://github.com/siddhi-io/siddhi-io-azuredatalake.git</url>
         <developerConnection>scm:git:https://github.com/siddhi-io/siddhi-io-azuredatalake.git
         </developerConnection>
-        <tag>v1.0.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencyManagement>

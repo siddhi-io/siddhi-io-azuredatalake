@@ -183,7 +183,7 @@
         <azure.storage.file.share.version>12.2.0</azure.storage.file.share.version>
         <azure.storage.file.datalake.version>12.1.2</azure.storage.file.datalake.version>
         <azure.storage.common.version>12.7.0</azure.storage.common.version>
-        <jackson.databind.version>2.11.0</jackson.databind.version>
+        <jackson.databind.version>2.12.6.1</jackson.databind.version>
         <azure.core.version>1.5.1</azure.core.version>
         <azure.core.http.netty.version>1.5.2</azure.core.http.netty.version>
         <reactor.netty.version>0.9.7.RELEASE</reactor.netty.version>
